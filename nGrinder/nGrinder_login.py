@@ -56,3 +56,10 @@ class TestRunner:
 		print('response result', response.read())
 		conn.close()
 		
+		if response.status == 200 :
+			print('success')
+			return
+        
+		else:
+			grinder.logger.warn("Warning. The response may not be correct. The response code was %d." %  response.status)
+			return
