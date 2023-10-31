@@ -8,19 +8,20 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 import pyperclip 
-
+from selenium.webdriver.support.ui import WebDriverWait
+import random
 import config # From custom config file
 
 '''
 Python : v3.11.4
 Selenium : 4.14.0
 '''
-def clipboard_input(captcha_id, user_input):
+def clipboard_input(driver,captcha_id, user_input):
     pyperclip.copy(user_input) # input을 클립보드로 복사
-    #driver.find_element_by_xpath(user_xpath).click() # element focus 설정
-    driver.find_element(By.ID,captcha_id).click()
+    driver.find_element(By.CSS_SELECTOR,captcha_id).click()
     
     ActionChains(driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform() # ctrl + v 전달
+    time.sleep(1)
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
@@ -70,8 +71,22 @@ li_element = driver.find_element(By.ID, f'{date_which_you_want}').click()
 time.sleep(0.5)
 reserve_button = driver.find_element(By.ID, f'{reservation_btn_ID}').click()
 time.sleep(1)
+
 driver.switch_to.window(driver.window_handles[1])
 captcha = input("Recaptcha: ")
 captcha_id = "label-for-captcha"
 
 clipboard_input(driver, captcha_id, captcha)
+
+driver.find_element(By.ID,"btnComplete").click()
+time.sleep(1)
+wait = WebDriverWait(driver, 5)  
+
+iframe_element = driver.find_element(By.ID,f'{iframe_id}') # iframe 내에 html 소스가 있음
+driver.switch_to.frame(iframe_element)
+
+inner_html_element = driver.find_element(By.TAG_NAME,'html')
+inner_html_text =inner_html_element.text
+
+tr_element = driver.find_element(By.ID,f"{seat_grade_id}").click()
+time.sleep(3)
