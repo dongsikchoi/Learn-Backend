@@ -90,3 +90,43 @@ inner_html_text =inner_html_element.text
 
 tr_element = driver.find_element(By.ID,f"{seat_grade_id}").click()
 time.sleep(3)
+
+while True:
+    wait = WebDriverWait(driver, 1)  
+    div = driver.find_elements(By.XPATH, f"{parent_div}']")
+    li_tags = div[0].find_elements(By.TAG_NAME,"li")
+    is_zero = False
+
+    for li in li_tags:
+        residual = li.find_element(By.CLASS_NAME,'seat_residual')
+        res = residual.find_element(By.TAG_NAME,'strong').text
+        print(res)
+        if res != '0':
+            is_zero = True 
+            li.click()
+            break
+    if is_zero:
+        break
+    refresh_link = driver.find_element(By.ID, f"{refresh_link}")
+    refresh_link.click()
+    time.sleep(random.uniform(1,3) )
+
+print(f'나왔다!')
+canvas = driver.find_element(By.ID,f'{grape_canvas}')
+grapes = canvas.find_elements(By.TAG_NAME,'rect')
+
+is_success = False 
+for grape in grapes:
+    try:
+        value = grape.get_attribute("fill")
+        if value != 'f{blank_color}':
+            grape.click() 
+
+            next_button = driver.find_element(By.ID,"nextTicketSelection").click()
+            is_success=True
+            break
+    except:
+        continue
+if is_success:
+    driver.execute_script("alert('완료');")
+
