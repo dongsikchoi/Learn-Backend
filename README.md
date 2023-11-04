@@ -6,3 +6,4 @@ Learn about backend stuffs
 2. Algorithms (Public)
 3. etc
    - httpx
+   - 취소표 예매 - 악용 금지
