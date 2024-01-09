@@ -140,10 +140,11 @@ while True:
         x = float(grape.get_attribute('x'))
         y = float(grape.get_attribute('y'))
         fill = grape.get_attribute('fill')
-        is_complete=True
-        grape.click()
-        next_button = driver.find_element(By.ID,"nextTicketSelection").click()
-        break 
+        if fill != '#DDDDDD':
+            is_complete=True
+            grape.click()
+            next_button = driver.find_element(By.ID,"nextTicketSelection").click()
+            break 
 
     if is_complete:
         break
